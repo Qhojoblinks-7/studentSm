@@ -48,7 +48,7 @@ Now that you have two routes you can use a `Link` component to navigate between 
 To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
 
 ```tsx
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 ```
 
 Then anywhere in your JSX you can use it like so:
@@ -71,7 +71,7 @@ Here is an example layout that includes a header:
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 
 export const Route = createRootRoute({
   component: () => (
