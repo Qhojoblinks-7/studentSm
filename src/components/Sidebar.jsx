@@ -65,7 +65,7 @@ const Sidebar = () => {
       </div>
 
       {/* 2. Scrollable Menu List */}
-      <div className={`flex-1 overflow-y-auto py-2 space-y-1 custom-scrollbar scrollbar-hide ${isOpen ? 'px-4' : 'px-2'}`}>
+      <div className={`flex-1 overflow-y-auto py-2 space-y-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isOpen ? 'px-4' : 'px-2'}`}>
         {menuItems.map((item) => {
           const isActive = currentPath === item.href;
           const Icon = item.icon;

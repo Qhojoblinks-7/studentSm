@@ -21,6 +21,11 @@ import Transportation from './pages/Transportation';
 // Mobile components
 import MobileLoginPage from '../mobileView/MobileLoginPage';
 import MobileAssignment from '../mobileView/MobileAssignment';
+import MobileSchedule from '../mobileView/MobileSchedule';
+import MobilePerformance from '../mobileView/MobilePerformance';
+import MobileAILearningPath from '../mobileView/MobileAILearningPath';
+import MobileFeesAndPayments from '../mobileView/MobileFeeAndPayment';
+import MobileResults from '../mobileView/MobileResults';
 
 // Stand-in components for other routes (matching the sidebar)
 const BooksMaterials = () => <div className="p-6"><h1 className="text-2xl font-bold">Books and Materials</h1><p>Library and learning materials management.</p></div>;
@@ -79,11 +84,69 @@ const App = () => {
             </div>
           </>
         } />
-        <Route path="schedule" element={<Schedule />} />
-        <Route path="fees-payments" element={<FeesAndPayments />} />
-        <Route path="results" element={<Results />} />
-        <Route path="ai-path" element={<AILearningPath />} />
-        <Route path="performance" element={<Performance />} />
+        <Route path="schedule" element={
+          <>
+            <div className="hidden md:block">
+              <Schedule />
+            </div>
+            <div className="md:hidden">
+              <MobileSchedule />
+            </div>
+          </>
+        } />
+        <Route path="books-materials" element={
+          
+          <>
+            <div className="hidden md:block">
+              <BooksMaterials />
+            </div>
+            <div className="md:hidden">
+              <NotFound />
+            </div>
+          </>
+          } />
+        <Route path="fees-payments" element={
+          <>
+            <div className="hidden md:block">
+              <FeesAndPayments />
+            </div>
+            <div className="md:hidden">
+              <MobileFeesAndPayments />
+            </div>
+          </>
+        } />
+        <Route path="results" element={
+          
+          <>
+            <div className="hidden md:block">
+              <Results />
+            </div>
+            <div className="md:hidden">
+              <MobileResults />
+            </div>
+          </>
+        } />
+        <Route path="ai-path" element={
+          
+          <>
+            <div className="hidden md:block">
+              <AILearningPath />
+            </div>
+            <div className="md:hidden">
+              <MobileAILearningPath />
+            </div>
+          </>
+          } />
+        <Route path="performance" element={
+          <>
+            <div className="hidden md:block">
+              <Performance />
+            </div>
+            <div className="md:hidden">
+              <MobilePerformance />
+            </div>
+          </>
+          } />
         <Route path="analytics" element={<Analytics />} />
         <Route path="/transport" element={<Transportation />} />
 
