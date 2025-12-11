@@ -1,22 +1,25 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authSlice from './authSlice'
-import dashboardSlice from './dashboardSlice'
-import feesAndPaymentsSlice from './feesAndPaymentsSlice'
-import feesPaymentsSlice from './feesPaymentsSlice'
-import myCoursesSlice from './myCoursesSlice'
-import performanceSlice from './performanceSlice'
-import resultsSlice from './resultsSlice'
-import scheduleSlice from './scheduleSlice'
+// Let's bring in our reducers here
+import authReducer from './authSlice'
+import dashboardReducer from './dashboardSlice'
+import feesPaymentsReducer from './feesPaymentsSlice'
+import feesAndPaymentsReducer from './feesAndPaymentsSlice'
+import myCoursesReducer from './myCoursesSlice'
+import performanceReducer from './performanceSlice'
+import resultsReducer from './resultsSlice'
+import scheduleReducer from './scheduleSlice'
+// Feel free to add more reducers as needed
 
 export const store = configureStore({
   reducer: {
-    auth: authSlice,
-    dashboard: dashboardSlice,
-    feesAndPayments: feesAndPaymentsSlice,
-    feesPayments: feesPaymentsSlice,
-    myCourses: myCoursesSlice,
-    performance: performanceSlice,
-    results: resultsSlice,
-    schedule: scheduleSlice,
+    auth: authReducer,
+    dashboard: dashboardReducer,
+    feesPayments: feesPaymentsReducer,
+    feesAndPayments: feesAndPaymentsReducer,
+    myCourses: myCoursesReducer,
+    performance: performanceReducer,
+    results: resultsReducer,
+    schedule: scheduleReducer,
+    // Add other reducers here when ready
   },
 })

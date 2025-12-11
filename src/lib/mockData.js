@@ -125,81 +125,151 @@ export const studentCourses = [
     completedLessons: 17,
   },
   {
-   id: 7,
-   title: "Our World Our People",
-   code: "OWOP123",
-   teacher: "Sir Antwi Boasiako",
-   progressPercentage: 55,
-   totalLessons: 18,
-   completedLessons: 9,
+    id: 7,
+    title: "Our World Our People",
+    code: "OWOP123",
+    teacher: "Sir Antwi Boasiako",
+    progressPercentage: 55,
+    totalLessons: 18,
+    completedLessons: 9,
+  },
+  {
+    id: 8,
+    title: "English Language",
+    code: "ENG101",
+    teacher: "Ms Paulina K. Barnes",
+    progressPercentage: 78,
+    totalLessons: 22,
+    completedLessons: 17,
+  },
+  {
+    id: 9,
+    title: "Ghanaian Language",
+    code: "GHA201",
+    teacher: "Mr. Godfred Kusi",
+    progressPercentage: 65,
+    totalLessons: 20,
+    completedLessons: 13,
+  },
+  {
+    id: 10,
+    title: "French",
+    code: "FRE301",
+    teacher: "Ms. Comfort Addo",
+    progressPercentage: 40,
+    totalLessons: 16,
+    completedLessons: 6,
+  },
+  {
+    id: 11,
+    title: "Physical Education",
+    code: "PED202",
+    teacher: "Mr. Samuel Ofori",
+    progressPercentage: 88,
+    totalLessons: 24,
+    completedLessons: 21,
+  },
+  {
+    id: 12,
+    title: "Career Technology",
+    code: "CTE303",
+    teacher: "Mr. Emmanuel Asante",
+    progressPercentage: 72,
+    totalLessons: 19,
+    completedLessons: 13,
+  },
+  {
+    id: 13,
+    title: "Home Economics",
+    code: "HEC404",
+    teacher: "Ms. Grace Mensah",
+    progressPercentage: 35,
+    totalLessons: 14,
+    completedLessons: 4,
+  },
+  {
+    id: 14,
+    title: "Visual Arts",
+    code: "VAR505",
+    teacher: "Mr. Kwame Nkrumah",
+    progressPercentage: 50,
+    totalLessons: 21,
+    completedLessons: 10,
+  },
+  {
+    id: 15,
+    title: "Music",
+    code: "MUS606",
+    teacher: "Ms. Akosua Boateng",
+    progressPercentage: 68,
+    totalLessons: 18,
+    completedLessons: 12,
   },
 ];
 
 // --- Headmaster Dashboard Data ---
 
 export const headmasterKPIData = [
-  {
-    id: 1,
-    title: "Total Enrollment",
-    value: "2,450",
-    unit: "Students",
-    trend: "+4.2%",
-    trendDirection: "up",
-    icon: "Users",
-  },
-  {
-    id: 2,
-    title: "Academic Success Rate",
-    value: "89.5%",
-    unit: "AI Predicted Passing",
-    trend: "+1.1%",
-    trendDirection: "up",
-    icon: "CheckCircle",
-  },
-  {
-    id: 3,
-    title: "Budget Surplus/Deficit",
-    value: "$15,200",
-    unit: "Surplus (YTD)",
-    trend: "-0.5%",
-    trendDirection: "down",
-    icon: "DollarSign",
-  },
-  {
-    id: 4,
-    title: "Staff Teaching Efficiency",
-    value: "92%",
-    unit: "Performance Metric",
-    trend: "+0.8%",
-    trendDirection: "up",
-    icon: "Target",
-  },
+ {
+   id: 1,
+   title: "Total Enrollment",
+   value: "2,450",
+   unit: "Students",
+   trend: "+4.2%",
+   trendDirection: "up",
+   icon: "Users",
+ },
+ {
+   id: 2,
+   title: "Academic Success Rate",
+   value: "89.5%",
+   unit: "AI Predicted Passing",
+   trend: "+1.1%",
+   trendDirection: "up",
+   icon: "CheckCircle",
+ },
+ {
+   id: 3,
+   title: "Budget Surplus/Deficit",
+   value: "$15,200",
+   unit: "Surplus (YTD)",
+   trend: "-0.5%",
+   trendDirection: "down",
+   icon: "DollarSign",
+ },
+ {
+   id: 4,
+   title: "Staff Teaching Efficiency",
+   value: "92%",
+   unit: "Performance Metric",
+   trend: "+0.8%",
+   trendDirection: "up",
+   icon: "Target",
+ },
 ];
 
 export const financialForecastData = [
-  { month: 'Jan', Actual: 52000, Predicted: 50000, BudgetLimit: 55000 },
-  { month: 'Feb', Actual: 55000, Predicted: 53000, BudgetLimit: 55000 },
-  { month: 'Mar', Actual: 56000, Predicted: 55500, BudgetLimit: 58000 },
-  { month: 'Apr', Actual: 58000, Predicted: 57000, BudgetLimit: 58000 },
-  { month: 'May', Actual: 61000, Predicted: 60500, BudgetLimit: 62000 },
-  { month: 'Jun', Actual: 65000, Predicted: 64000, BudgetLimit: 65000 },
-  { month: 'Jul', Actual: 68000, Predicted: 67500, BudgetLimit: 68000 },
-  { month: 'Aug', Actual: 70000, Predicted: 71000, BudgetLimit: 70000 },
-  { month: 'Sep', Actual: 75000, Predicted: 74500, BudgetLimit: 75000 },
-  { month: 'Oct', Actual: 72000, Predicted: 73500, BudgetLimit: 75000 },
-  { month: 'Nov', Actual: 78000, Predicted: 79000, BudgetLimit: 78000 }, // Budget Overrun here
-  { month: 'Dec', Actual: 80000, Predicted: 82000, BudgetLimit: 80000 }, // Budget Overrun here
+ { month: 'Jan', Actual: 52000, Predicted: 50000, BudgetLimit: 55000 },
+ { month: 'Feb', Actual: 55000, Predicted: 53000, BudgetLimit: 55000 },
+ { month: 'Mar', Actual: 56000, Predicted: 55500, BudgetLimit: 58000 },
+ { month: 'Apr', Actual: 58000, Predicted: 57000, BudgetLimit: 58000 },
+ { month: 'May', Actual: 61000, Predicted: 60500, BudgetLimit: 62000 },
+ { month: 'Jun', Actual: 65000, Predicted: 64000, BudgetLimit: 65000 },
+ { month: 'Jul', Actual: 68000, Predicted: 67500, BudgetLimit: 68000 },
+ { month: 'Aug', Actual: 70000, Predicted: 71000, BudgetLimit: 70000 },
+ { month: 'Sep', Actual: 75000, Predicted: 74500, BudgetLimit: 75000 },
+ { month: 'Oct', Actual: 72000, Predicted: 73500, BudgetLimit: 75000 },
+ { month: 'Nov', Actual: 78000, Predicted: 79000, BudgetLimit: 78000 }, // Budget Overrun here
+ { month: 'Dec', Actual: 80000, Predicted: 82000, BudgetLimit: 80000 }, // Budget Overrun here
 ];
 
 export const academicRiskData = [
-    { department: 'Math', AtRisk: 40, Success: 85, Goal: 90 },
-    { department: 'Science', AtRisk: 30, Success: 92, Goal: 90 },
-    { department: 'Arts', AtRisk: 25, Success: 95, Goal: 90 },
-    { department: 'Langs', AtRisk: 50, Success: 80, Goal: 90 },
+   { department: 'Math', AtRisk: 40, Success: 85, Goal: 90 },
+   { department: 'Science', AtRisk: 30, Success: 92, Goal: 90 },
+   { department: 'Arts', AtRisk: 25, Success: 95, Goal: 90 },
+   { department: 'Langs', AtRisk: 50, Success: 80, Goal: 90 },
 ];
 
-
-// src/lib/mockData.js (Append the following data if not already present)
 
 // src/lib/mockData.js (Append the following data if not already present)
 
@@ -327,8 +397,6 @@ export const scheduleViewsData = {
 
 // src/lib/mockData.js (Append the following data if not already present)
 
-// src/lib/mockData.js (Append the following data if not already present)
-
 export const dashboardData = {
   studentName: "Antwi Boasiako",
   homeworkCompletion: 85,
@@ -346,6 +414,12 @@ export const dashboardPosts = [
 export const linkedTeachers = [
   { id: 1, name: 'Mr. Godfred Kusi (Subject Teacher)', subject: 'Science' },
   { id: 2, name: 'Ms Paulina K. Barnes (Class Teacher)', subject: 'English Language' },
+  { id: 3, name: 'Mr. Ebenezer Nketia (Subject Teacher)', subject: 'Computing' },
+  { id: 4, name: 'Dr. Kwasi Mensah (Subject Teacher)', subject: 'Religious and Moral Education' },
+  { id: 5, name: 'Ms. Helena Agyeman (Subject Teacher)', subject: 'Integrated Science' },
+  { id: 6, name: 'Prof. Yaw Boateng (Subject Teacher)', subject: 'Social Studies' },
+  { id: 7, name: 'Ms. Adwoa Osei (Subject Teacher)', subject: 'Creative and Performing Arts' },
+  { id: 8, name: 'Sir Antwi Boasiako (Subject Teacher)', subject: 'Mathematics' },
 ];
 
 export const attendanceData = {
@@ -364,8 +438,7 @@ export const attendanceData = {
 };
 
 
-
-// src/lib/mockData.js (Append the following data if not already present)
+// src/lib/mockData.js (Append the following data)
 
 export const feeData = {
   summary: {
@@ -390,7 +463,7 @@ export const feeData = {
   ],
 };
 
-// src/lib/mockData.js (Append the following data if not already present)
+// src/lib/mockData.js (Append the following data)
 
 export const academicResults = {
   academicYear: '2023/2024',
@@ -462,7 +535,7 @@ export const historicalAcademicResults = [
   },
 ];
 
-// src/lib/mockData.js (Append the following data if not already present)
+// src/lib/mockData.js (Append the following data)
 
 export const aiLearningPathMetrics = {
   aiPredictions: 3,
@@ -478,73 +551,48 @@ export const studentCoursesProgress = [
     { title: 'Creative and Performing Art', code: 'CPA303', teacher: 'Sir Antwi Boasiako', lessonsCompleted: 9, totalLessons: 23 },
 ];
 
-// src/lib/mockData.js (Append the following data)
-
-export const studentResults = {
-  currentGPA: 3.75,
-  overallPercentage: 88.4,
-  recentScores: [
-    { subject: 'Mathematics', type: 'Quiz 2', score: 92, total: 100, date: '2025-11-20', grade: 'A' },
-    { subject: 'Integrated Science', type: 'Midterm Exam', score: 85, total: 100, date: '2025-11-15', grade: 'B+' },
-    { subject: 'Computing', type: 'Assignment 1', score: 95, total: 100, date: '2025-11-10', grade: 'A+' },
-    { subject: 'Religious and Moral Education', type: 'Class Test', score: 78, total: 100, date: '2025-11-05', grade: 'B' },
-  ],
-  semesterBreakdown: [
-    { subject: 'Mathematics', score: 89, grade: 'A-', remarks: 'Excellent grasp of Calculus.' },
-    { subject: 'Integrated Science', score: 83, grade: 'B+', remarks: 'Needs more focus on Physics concepts.' },
-    { subject: 'Religious and Moral Education', score: 79, grade: 'B', remarks: 'Good effort. Improve essay structure.' },
-    { subject: 'Creative and Performing Art', score: 95, grade: 'A+', remarks: 'Outstanding creativity and performance.' },
-    { subject: 'Computing', score: 75, grade: 'C+', remarks: 'Low score due to database concepts.' },
-    { subject: 'Social Studies', score: 90, grade: 'A', remarks: 'Consistent high performance.' },
-  ]
-};
-
-// src/lib/mockData.js (Append the following data)
+// src/lib/mockData.js (Append or ensure this data structure exists)
 
 export const aiRecommendations = {
-  mainInsight: {
-    subject: "Computing",
-    focusArea: "Logic & Problem Solving",
-    status: "Requires Immediate Attention",
-    message: "Your error patterns indicate difficulty with flow control and conditional logic. Focusing here will significantly boost your Q3 project score.",
-    confidence: "95%",
-  },
-  weakTopics: [
+  personalized: [
     {
-      id: 1,
-      topic: "Binary Operations & Logic Gates",
-      course: "Computing (ICT404)",
-      reason: "High error rate (7/10 incorrect) on Term 2 Quiz, indicating foundational gaps.",
-      activities: [
-        { type: 'Quiz', label: 'Practice Quiz: 10 Gates Questions', link: '#', icon: 'FileText' },
-        { type: 'Video', label: 'Watch: 5-Minute Logic Tutorial', link: '#', icon: 'Video' },
-        { type: 'Material', label: 'Review Class Notes: Chapter 4', link: '#', icon: 'BookOpen' },
-      ],
+      type: 'Study Suggestion',
+      confidence: 87,
+      content: 'Your performance in Religious and Moral Education is trending down. Consider scheduling study sessions for religious concepts.',
+      progress: 87, // Percentage for the progress bar
     },
     {
-      id: 2,
-      topic: "Probability Concepts",
-      course: "Mathematics (MATH303)",
-      reason: "Performance is trending down (-5% from last term) in statistics components.",
-      activities: [
-        { type: 'Tutor', label: 'Request Peer-to-Peer Tutoring Session', link: '#', icon: 'Users' },
-        { type: 'Material', label: 'Download Workbook: Probability Practice', link: '#', icon: 'Download' },
-      ],
+      type: 'Career Path',
+      confidence: 92,
+      content: 'Based on your strong performance in Mathematics, Science and Computing, consider exploring Software Engineering roles.',
+      progress: 92,
     },
     {
-      id: 3,
-      topic: "Plant and Animal Cells",
-      course: "Integrated Science (SCI201)",
-      reason: "Missed key details in Term 2 Essay on Organelles, suggesting recall issues.",
-      activities: [
-        { type: 'Quiz', label: 'Interactive Flashcards Review', link: '#', icon: 'Zap' },
-        { type: 'Video', label: 'Watch: 3D Cell Anatomy Video', link: '#', icon: 'Video' },
-      ],
+      type: 'Learning Resource',
+      confidence: 64,
+      content: 'AI suggests additional video tutorials for Database Normalization concepts.',
+      progress: 64,
     },
+  ],
+  recommendedResources: [
+    { title: 'Advanced religious and Moral Education', code: 'RME301', type: 'Video', match: 95 },
+    { title: 'Tree Algorithms Practice Problems', code: 'CS202', type: 'Exercise', match: 95 },
   ],
 };
 
-
+// Performance page data
+export const performanceMetrics = {
+    gpa: 3.7, //
+    gpaMax: 4.00, //
+    gpaChange: +0.2, //
+    creditsEarned: 120, //
+    creditsTotal: 144, //
+    creditsChange: +24, // Assumed increase based on context
+    classRank: 12, //
+    classSize: 44, //
+    rankPercentage: 15, //
+    academicAchievement: 78, //
+};
 
 // Data for the Class Average chart
 export const classAverageData = [
@@ -677,93 +725,3 @@ export const transportationSafetyMetrics = [
     { metric: "Speed Adherence", value: 95 },
     { metric: "Emergency Response", value: 100 },
 ];
-
-
-// src/lib/mockData.js (Append the following data)
-
-export const weeklySchedule = [
-  {
-    day: 'Monday',
-    classes: [
-      { time: '8:00 AM - 9:30 AM', course: 'Mathematics', location: 'Classroom 3A', code: 'MATH303' },
-      { time: '9:30 AM - 11:00 AM', course: 'Integrated Science', location: 'Lab 1', code: 'SCI201' },
-      { time: '11:00 AM - 12:00 PM', course: 'Break', location: 'Canteen', code: 'BREAK' },
-      { time: '12:00 PM - 1:30 PM', course: 'Social Studies', location: 'Classroom 3A', code: 'SOC205' },
-    ],
-  },
-  {
-    day: 'Tuesday',
-    classes: [
-      { time: '8:00 AM - 9:30 AM', course: 'Religious and Moral Education', location: 'Library Annex', code: 'RME101' },
-      { time: '9:30 AM - 11:00 AM', course: 'Creative and Performing Arts', location: 'Art Studio', code: 'CPA404' },
-      { time: '11:00 AM - 12:00 PM', course: 'Break', location: 'Canteen', code: 'BREAK' },
-      { time: '12:00 PM - 1:30 PM', course: 'Computing', location: 'IT Lab', code: 'COMP110' },
-    ],
-  },
-  {
-    day: 'Wednesday',
-    classes: [
-      { time: '8:00 AM - 9:30 AM', course: 'Mathematics', location: 'Classroom 3A', code: 'MATH303' },
-      { time: '9:30 AM - 11:00 AM', course: 'Our World Our People', location: 'Classroom 3B', code: 'OWOP123' },
-      { time: '11:00 AM - 12:00 PM', course: 'Break', location: 'Canteen', code: 'BREAK' },
-      { time: '12:00 PM - 1:30 PM', course: 'Integrated Science', location: 'Lab 1', code: 'SCI201' },
-    ],
-  },
-  {
-    day: 'Thursday',
-    classes: [
-      { time: '8:00 AM - 9:30 AM', course: 'Computing', location: 'IT Lab', code: 'COMP110' },
-      { time: '9:30 AM - 11:00 AM', course: 'Social Studies', location: 'Classroom 3A', code: 'SOC205' },
-      { time: '11:00 AM - 12:00 PM', course: 'Break', location: 'Canteen', code: 'BREAK' },
-      { time: '12:00 PM - 1:30 PM', course: 'Religious and Moral Education', location: 'Library Annex', code: 'RME101' },
-    ],
-  },
-  {
-    day: 'Friday',
-    classes: [
-      { time: '8:00 AM - 9:30 AM', course: 'Creative and Performing Arts', location: 'Art Studio', code: 'CPA404' },
-      { time: '9:30 AM - 11:00 AM', course: 'Mathematics (Quiz)', location: 'Classroom 3A', code: 'MATH303' },
-      { time: '11:00 AM - 12:00 PM', course: 'Assembly/Closing', location: 'Auditorium', code: 'END' },
-    ],
-  },
-];
-
-// src/lib/mockData.js (Append the following data)
-
-export const studentPerformanceData = {
-  gpa: 3.55,
-  overallStatus: "Excellent",
-  trend: "+0.15",
-  lastTerm: "3.40",
-};
-
-export const termGradesData = [
-  { course: 'Math', Term1: 85, Term2: 90, Target: 90 },
-  { course: 'Science', Term1: 78, Term2: 85, Target: 85 },
-  { course: 'RME', Term1: 92, Term2: 95, Target: 90 },
-  { course: 'Computing', Term1: 65, Term2: 75, Target: 80 },
-  { course: 'Arts', Term1: 80, Term2: 82, Target: 85 },
-];
-
-export const skillAssessmentData = [
-    { skill: 'Critical Thinking', score: 85 },
-    { skill: 'Problem Solving', score: 78 },
-    { skill: 'Communication', score: 92 },
-    { skill: 'Digital Literacy', score: 65 },
-    { skill: 'Collaboration', score: 80 },
-];
-
-
-// src/lib/mockData.js (Append the following data)
-
-export const performanceMetrics = {
-    gpa: 3.7,
-    gpaMax: 4.00,
-    gpaChange: +0.2,
-    creditsEarned: 120,
-    creditsTotal: 144,
-    creditsChange: +24,
-    classRank: 12,
-    classSize: 44,
-    rankPercentage: 15,
-};

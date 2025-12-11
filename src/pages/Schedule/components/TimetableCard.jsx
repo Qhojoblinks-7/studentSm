@@ -1,16 +1,17 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { weekDays } from '@/lib/mockData';
 
 // Helper function to determine cell styling
 const getCellClass = (course) => {
   const baseClass = 'w-full px-3 py-2 text-sm font-medium text-left';
   if (course === 'BREAK') {
-    return `${baseClass} text-blue-800 bg-blue-50`;
+    return `${baseClass} text-blue-800`;
   }
   if (course.includes('Assembly') || course.includes('Remedial')) {
-    return `${baseClass} text-blue-800 bg-blue-50`;
+    return `${baseClass} text-blue-800`;
   }
-  return `${baseClass} text-slate-700 bg-white`;
+  return `${baseClass} text-slate-700`;
 };
 
 // --- Sub-Component: TimetableCard ---
@@ -19,7 +20,7 @@ const TimetableCard = ({ time, schedule, isLightBlue, isSingleDay = false }) => 
     <CardContent className="p-4">
       <div className="flex justify-between items-center gap-2">
         {/* Time Slot */}
-        <div className="text-sm font-semibold text-slate-900 px-3 py-2 rounded-md text-center flex-shrink-0 bg-slate-100 min-w-[120px]">
+        <div className="text-sm font-semibold text-slate-900 px-3 py-2 rounded-md text-center flex-shrink-0">
           {time}
         </div>
 
@@ -34,10 +35,10 @@ const TimetableCard = ({ time, schedule, isLightBlue, isSingleDay = false }) => 
             </div>
           ) : (
             // For weekly timetable
-            ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map(day => {
+            weekDays.map(day => {
               const course = schedule[day] || '';
               return (
-                <div key={day} className="text-center flex-1 min-w-[100px]">
+                <div key={day} className="text-center flex-1">
                   <div className={getCellClass(course)}>
                     {course}
                   </div>

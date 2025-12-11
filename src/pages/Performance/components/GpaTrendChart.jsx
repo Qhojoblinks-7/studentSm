@@ -1,112 +1,69 @@
 import React from 'react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend
-} from 'recharts';
-import { gpaTrendData } from '@/lib/mockData';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from '@/components/ui/chart';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 const GpaTrendChart = () => {
-  const data = gpaTrendData.map(item => ({
-    month: item.month,
-    'Current Semester': item.line1,
-    'Previous Semester': item.line2,
-  }));
+    const chartData = [
+        { month: "Jan", academic: 75, target: 80 },
+        { month: "Feb", academic: 78, target: 80 },
+        { month: "Mar", academic: 82, target: 80 },
+        { month: "Apr", academic: 85, target: 80 },
+        { month: "May", academic: 88, target: 80 },
+        { month: "Jun", academic: 90, target: 80 },
+        { month: "Jul", academic: 87, target: 80 },
+    ];
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-slate-200 rounded-lg shadow-lg">
-          <p className="font-medium text-slate-900">{`Month: ${label}`}</p>
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }} className="text-sm">
-              {`${entry.dataKey}: ${entry.value}`}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+    const chartConfig = {
+        academic: {
+            label: "Academic Performance",
+            color: "var(--chart-1)",
+        },
+        target: {
+            label: "Target Performance",
+            color: "var(--chart-2)",
+        },
+    };
 
-  return (
-    <div className="w-full">
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-          <XAxis
-            dataKey="month"
-            tick={{ fontSize: 12, fill: '#64748b' }}
-            axisLine={{ stroke: '#e2e8f0' }}
-          />
-          <YAxis
-            tick={{ fontSize: 12, fill: '#64748b' }}
-            axisLine={{ stroke: '#e2e8f0' }}
-            domain={[0, 100]}
-            label={{ value: 'GPA Points', angle: -90, position: 'insideLeft' }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend
-            wrapperStyle={{ paddingTop: '20px' }}
-          />
-          <Line
-            type="monotone"
-            dataKey="Current Semester"
-            stroke="#3b82f6"
-            strokeWidth={3}
-            dot={{ fill: '#3b82f6', strokeWidth: 2, r: 6 }}
-            activeDot={{ r: 8, stroke: '#3b82f6', strokeWidth: 2, fill: '#ffffff' }}
-            name="Current Semester"
-          />
-          <Line
-            type="monotone"
-            dataKey="Previous Semester"
-            stroke="#94a3b8"
-            strokeWidth={2}
-            strokeDasharray="5 5"
-            dot={{ fill: '#94a3b8', strokeWidth: 2, r: 4 }}
-            activeDot={{ r: 6, stroke: '#94a3b8', strokeWidth: 2, fill: '#ffffff' }}
-            name="Previous Semester"
-          />
-        </LineChart>
-      </ResponsiveContainer>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-3 gap-4 mt-6">
-        <div className="text-center p-3 bg-blue-50 rounded-lg">
-          <div className="text-lg font-semibold text-blue-600">
-            {Math.round(data.reduce((acc, item) => acc + item['Current Semester'], 0) / data.length)}
-          </div>
-          <div className="text-sm text-slate-600">Current Avg</div>
-        </div>
-        <div className="text-center p-3 bg-slate-50 rounded-lg">
-          <div className="text-lg font-semibold text-slate-600">
-            {Math.round(data.reduce((acc, item) => acc + item['Previous Semester'], 0) / data.length)}
-          </div>
-          <div className="text-sm text-slate-600">Previous Avg</div>
-        </div>
-        <div className="text-center p-3 bg-green-50 rounded-lg">
-          <div className="text-lg font-semibold text-green-600">
-            +{Math.round(((data.reduce((acc, item) => acc + item['Current Semester'], 0) / data.length) - (data.reduce((acc, item) => acc + item['Previous Semester'], 0) / data.length)) * 10) / 10}
-          </div>
-          <div className="text-sm text-slate-600">Improvement</div>
-        </div>
-      </div>
-    </div>
-  );
+    return (
+        <ChartContainer config={chartConfig} className="h-[180px] sm:h-[230px] lg:h-[295px] w-full text-xs">
+            <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                    dataKey="month"
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                    tickFormatter={(value) => value.slice(0, 3)}
+                />
+                <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                />
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent indicator="dot" />}
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Line
+                    dataKey="academic"
+                    type="monotone"
+                    stroke="#FF928A"
+                    strokeWidth={3}
+                    dot={{ fill: "#FF928A", strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6 }}
+                />
+                <Line
+                    dataKey="target"
+                    type="monotone"
+                    stroke="#7E00D8"
+                    strokeWidth={2}
+                    dot={{ fill: "#7E00D8", strokeWidth: 2, r: 4 }}
+                    activeDot={{ r: 6 }}
+                />
+            </LineChart>
+        </ChartContainer>
+    );
 };
 
 export default GpaTrendChart;

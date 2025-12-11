@@ -1,50 +1,45 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { BookOpen, Clock, CheckCircle } from 'lucide-react';
 
 const CourseProgressList = ({ courses }) => {
+  const navigate = useNavigate();
+
+  const handleSeeAllCourses = () => {
+    // Navigate to the MyCourses page
+    navigate('/courses');
+  };
+
   return (
-    <Card className="shadow-lg border-slate-100">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-slate-900 flex items-center">
-          <BookOpen className="w-6 h-6 mr-2 text-blue-600" />
-          Your Courses
-        </CardTitle>
+    <Card className="col-span-8 shadow-md border-slate-100">
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg font-bold text-slate-900">Your Courses</CardTitle>
+          <Button
+            variant="link"
+            className="text-blue-600 h-auto p-0 text-sm"
+            onClick={handleSeeAllCourses}
+          >
+            See all
+          </Button>
+        </div>
+        <p className="text-sm text-slate-500">Courses are based on the current GES curriculum for all Basic Schools</p>
       </CardHeader>
-      <CardContent className="space-y-4">
-        {courses.map((course) => (
-          <div key={course.id} className="p-4 border border-slate-200 rounded-lg hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <h3 className="font-semibold text-slate-900 text-lg">{course.title}</h3>
-                <p className="text-sm text-slate-600">{course.code}</p>
-                <p className="text-sm text-slate-500">by {course.teacher}</p>
-              </div>
-              <Badge variant="secondary" className="bg-blue-50 text-blue-700">
-                {course.progressPercentage}%
-              </Badge>
-            </div>
-
-            <div className="mb-3">
-              <Progress value={course.progressPercentage} className="h-2" />
-            </div>
-
-            <div className="flex justify-between items-center text-sm text-slate-600">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 mr-1 text-green-500" />
-                <span>{course.completedLessons} of {course.totalLessons} lessons</span>
-              </div>
-              <div className="flex items-center">
-                <Clock className="w-4 h-4 mr-1 text-slate-400" />
-                <span>In Progress</span>
-              </div>
-            </div>
+    <CardContent className="space-y-4">
+      {courses.slice(0, 4).map(course => ( // Limiting to top 4 for the dashboard
+        <div key={course.id}>
+          <div className="flex justify-between items-center mb-1">
+            <p className="text-sm font-bold text-slate-800">{course.title}</p>
+            <span className="text-sm text-slate-600">{course.lessonsDone}/{course.totalLessons} Lessons</span>
           </div>
-        ))}
-      </CardContent>
-    </Card>
+          <p className="text-xs text-slate-500 mb-2">{course.code} | {course.teacher}</p>
+          <Progress value={course.progressPercentage} className="h-2 [&>div]:bg-blue-500 bg-slate-200" />
+        </div>
+      ))}
+    </CardContent>
+  </Card>
   );
 };
 

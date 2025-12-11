@@ -8,16 +8,20 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
+// Custom Components
+import VerificationManual from '@/components/VerificationManual';
+
 const ForgotPassword = () => {
   const [resetMethod, setResetMethod] = useState(''); // 'email' or 'phone'
   const [emailOrPhone, setEmailOrPhone] = useState('');
+  const [showVerificationModal, setShowVerificationModal] = useState(false);
 
   const handleResetPassword = (e) => {
     e.preventDefault();
     // Logic to send reset instructions based on selected method and input
     console.log(`Sending reset instructions via ${resetMethod} to: ${emailOrPhone}`);
-    alert(`Reset instructions sent to ${emailOrPhone}. Please check your ${resetMethod}.`);
-    // After sending, you might want to redirect to a confirmation page or login page
+    // Show verification modal instead of alert
+    setShowVerificationModal(true);
   };
 
   return (
@@ -40,7 +44,7 @@ const ForgotPassword = () => {
       </div>
 
       {/* Reset Password Form Card */}
-      <Card className="p-8 shadow-2xl rounded-xl bg-white/80 backdrop-blur-md border-slate-100 w-full max-w-md">
+      <Card className="p-8 shadow-2xl rounded-xl bg-gradient-to-r from-[#E8ECFF] via-[#FFF5F5] via-[#F0FFF4] to-[#E0FFF8] backdrop-blur-md border-slate-100 w-full max-w-md">
         <CardHeader className="p-0 mb-6">
           <CardTitle className="text-2xl font-bold text-slate-900">Reset password</CardTitle>
           <p className="text-sm text-slate-500">
@@ -57,7 +61,7 @@ const ForgotPassword = () => {
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select email or phone number" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white">
                   <SelectItem value="email">Email</SelectItem>
                   <SelectItem value="phone">Phone number</SelectItem>
                 </SelectContent>
@@ -101,7 +105,7 @@ const ForgotPassword = () => {
           
           {/* Back to Login Link */}
           <div className="text-center mt-6">
-            <Link to="/login" className="text-blue-600 hover:underline flex items-center justify-center text-sm">
+            <Link to="/login" className="text-slate-600 hover:underline flex items-center justify-center text-sm">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to login
             </Link>
@@ -111,15 +115,22 @@ const ForgotPassword = () => {
       </Card>
       
       {/* Footer Links and Copyright */}
-      <footer className="absolute bottom-6 text-sm text-slate-500 text-center">
-        <div className="flex space-x-4 mb-1">
-          <a href="#" className="hover:text-blue-600">policies</a>
-          <a href="#" className="hover:text-blue-600">Supports</a>
-          <a href="#" className="hover:text-blue-600">Help Center</a>
+      <footer className="absolute bottom-6 text-sm text-slate-500 text-center w-full">
+        <div className="flex justify-center space-x-4 mb-1">
+          <a href="#" className="hover:text-blue-600 text-center">policies</a>
+          <a href="#" className="hover:text-blue-600 text-center">Supports</a>
+          <a href="#" className="hover:text-blue-600 text-center">Help Center</a>
         </div>
-        <p>Copyright © 2024–2025 AltBit Softwares. All rights reserved.</p>
-        <p>EduManageAI School Management System V5.00 Release 1.0</p>
+        <p className="text-center">Copyright © 2024–2025 AltBit Softwares. All rights reserved.</p>
+        <p className="text-center">EduManageAI School Management System V5.00 Release 1.0</p>
       </footer>
+
+      {/* Verification Modal */}
+      {showVerificationModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <VerificationManual onClose={() => setShowVerificationModal(false)} />
+        </div>
+      )}
     </div>
   );
 };

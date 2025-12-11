@@ -1,114 +1,85 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Target, TrendingUp } from 'lucide-react';
-import { skillsAssessmentData } from '@/lib/mockData';
+import { useSelector, useDispatch } from 'react-redux';
+import { setActiveIndex } from '../../../store/performanceSlice';
+import { Card, CardTitle } from '@/components/ui/card';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { PieChart, Pie, Cell } from 'recharts';
 
 const SkillsAssessmentCardRadial = () => {
-  // Calculate overall average
-  const overallAverage = Math.round(
-    skillsAssessmentData.reduce((acc, skill) => acc + skill.value, 0) / skillsAssessmentData.length
-  );
+    const dispatch = useDispatch();
+    const activeIndex = useSelector((state) => state.performance.activeIndex);
 
-  // Create radial progress circle
-  const radius = 60;
-  const strokeWidth = 8;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDasharray = circumference;
-  const strokeDashoffset = circumference - (overallAverage / 100) * circumference;
+    const skillsData = [
+        { subject: 'Maths', score: 85, fill: '#FF928A' },
+        { subject: 'Science', score: 78, fill: '#7E00D8' },
+        { subject: 'English', score: 92, fill: '#3b82f6' },
+        { subject: 'Computing', score: 88, fill: '#10b981' },
+        { subject: 'Creative Arts', score: 75, fill: '#f59e0b' },
+    ];
 
-  return (
-    <Card className="shadow-lg border-slate-100">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg font-bold text-slate-900 flex items-center">
-          <Target className="w-5 h-5 mr-2 text-blue-600" />
-          Skills Overview
-        </CardTitle>
-        <p className="text-sm text-slate-600 mt-1">
-          Overall proficiency level
-        </p>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Radial Progress Chart */}
-        <div className="flex justify-center">
-          <div className="relative">
-            <svg width="140" height="140" className="transform -rotate-90">
-              {/* Background circle */}
-              <circle
-                cx="70"
-                cy="70"
-                r={radius}
-                stroke="#f1f5f9"
-                strokeWidth={strokeWidth}
-                fill="none"
-              />
-              {/* Progress circle */}
-              <circle
-                cx="70"
-                cy="70"
-                r={radius}
-                stroke="#3b82f6"
-                strokeWidth={strokeWidth}
-                fill="none"
-                strokeDasharray={strokeDasharray}
-                strokeDashoffset={strokeDashoffset}
-                strokeLinecap="round"
-                className="transition-all duration-1000 ease-out"
-              />
-            </svg>
-            {/* Center text */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-slate-900">{overallAverage}%</div>
-                <div className="text-sm text-slate-600">Overall</div>
-              </div>
-            </div>
-          </div>
-        </div>
+    const chartConfig = {
+        maths: { label: 'Maths', color: '#FF928A' },
+        science: { label: 'Science', color: '#7E00D8' },
+        english: { label: 'English', color: '#3b82f6' },
+        computing: { label: 'Computing', color: '#10b981' },
+        creativeArts: { label: 'Creative Arts', color: '#f59e0b' },
+    };
 
-        {/* Top Skills */}
-        <div className="space-y-3">
-          <h4 className="font-semibold text-slate-900">Top Performing Skills</h4>
-          {skillsAssessmentData
-            .sort((a, b) => b.value - a.value)
-            .slice(0, 3)
-            .map((skill, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: skill.dot }}
-                  ></div>
-                  <span className="text-sm font-medium text-slate-900">{skill.skill}</span>
+    const onPieEnter = (_, index) => {
+        dispatch(setActiveIndex(index));
+    };
+
+    const onPieLeave = () => {
+        dispatch(setActiveIndex(-1));
+    };
+
+    return (
+        <Card className="w-full shadow-lg p-2 sm:p-4 bg-gradient-to-br from-[#CBCEFF]/70 via-[#FFE8E8]/50 to-[#B7FFF9]/70 hover:shadow-xl hover:bg-gradient-to-br hover:from-[#CBCEFF]/80 hover:via-[#FFE8E8]/60 hover:to-[#B7FFF9]/80 transition-all duration-300">
+            <CardTitle className="text-lg sm:text-xl lg:text-xl font-bold text-slate-900 mb-1">Skills Assessment</CardTitle>
+            <p className="text-xs sm:text-sm lg:text-md text-slate-500 mb-4">AI-evaluated competencies</p>
+
+            <div className="flex flex-col items-center">
+                <ChartContainer config={chartConfig} className="h-[160px] w-[160px] sm:h-[200px] sm:w-[200px]">
+                    <PieChart>
+                        <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
+                        />
+                        <Pie
+                            data={skillsData}
+                            dataKey="score"
+                            nameKey="subject"
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={20}
+                            outerRadius={activeIndex === -1 ? 80 : 85}
+                            paddingAngle={6}
+                            strokeWidth={2}
+                            onMouseEnter={onPieEnter}
+                            onMouseLeave={onPieLeave}
+                        >
+                            {skillsData.map((entry, index) => (
+                                <Cell
+                                    key={`cell-${index}`}
+                                    fill={entry.fill}
+                                    stroke={activeIndex === index ? entry.fill : 'none'}
+                                    strokeWidth={activeIndex === index ? 3 : 0}
+                                />
+                            ))}
+                        </Pie>
+                    </PieChart>
+                </ChartContainer>
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2 mt-6 max-w-xs text-[10px]">
+                    {skillsData.map((skill, index) => (
+                        <div key={index} className="flex items-center">
+                            <span className={`w-3 h-3 rounded-full mr-2 flex-shrink-0`} style={{ backgroundColor: skill.fill }}></span>
+                            <span className="text-slate-700">{skill.subject}: {skill.score}%</span>
+                        </div>
+                    ))}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm font-medium text-slate-900">{skill.value}%</span>
-                  {skill.value >= 70 && (
-                    <TrendingUp className="w-3 h-3 text-green-500" />
-                  )}
-                </div>
-              </div>
-            ))}
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-          <div className="text-center">
-            <div className="text-lg font-semibold text-green-600">
-              {skillsAssessmentData.filter(skill => skill.value >= 70).length}
             </div>
-            <div className="text-xs text-slate-600">Strong Skills</div>
-          </div>
-          <div className="text-center">
-            <div className="text-lg font-semibold text-blue-600">
-              {skillsAssessmentData.filter(skill => skill.value < 70).length}
-            </div>
-            <div className="text-xs text-slate-600">Developing</div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
+        </Card>
+    );
 };
 
 export default SkillsAssessmentCardRadial;

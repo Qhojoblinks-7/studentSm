@@ -1,104 +1,44 @@
 import React from 'react';
+import { Zap } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { Brain, Target, BookOpen, TrendingUp } from 'lucide-react';
 
-const AIPersonalizedRecommendations = () => {
-  const recommendations = [
-    {
-      type: 'Study Suggestion',
-      confidence: 87,
-      content: 'Your performance in Religious and Moral Education is trending down. Consider scheduling study sessions for religious concepts.',
-      progress: 87,
-      icon: BookOpen,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
-    },
-    {
-      type: 'Career Path',
-      confidence: 92,
-      content: 'Based on your strong performance in Mathematics, Science and Computing, consider exploring Software Engineering roles.',
-      progress: 92,
-      icon: Target,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
-    },
-    {
-      type: 'Learning Resource',
-      confidence: 64,
-      content: 'AI suggests additional video tutorials for Database Normalization concepts.',
-      progress: 64,
-      icon: TrendingUp,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-    },
-  ];
-
-  return (
-    <Card className="col-span-8 shadow-lg border-slate-100">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-bold text-slate-900 flex items-center">
-          <Brain className="w-6 h-6 mr-2 text-purple-600" />
-          AI Personalized Recommendations
+const AIPersonalizedRecommendations = () => (
+    <Card className="col-span-4 shadow-md border-slate-100 ">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-md font-semibold text-slate-900 flex items-center">
+          <Zap className="w-5 h-5 mr-2 text-blue-600" /> AI Personalized Recommendations
         </CardTitle>
-        <p className="text-sm text-slate-600 mt-1">
-          Smart insights to help you excel in your studies
-        </p>
+        <p className="text-xs text-slate-500">Machine learning insights for your academic success and career path</p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {recommendations.map((rec, index) => (
-          <div key={index} className={`p-4 rounded-lg border ${rec.bgColor} border-slate-200`}>
-            <div className="flex items-start space-x-4">
-              <div className={`p-2 rounded-lg ${rec.bgColor} ${rec.color}`}>
-                <rec.icon className="w-5 h-5" />
-              </div>
-
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-2">
-                  <Badge variant="outline" className="text-xs font-medium">
-                    {rec.type}
-                  </Badge>
-                  <div className="flex items-center text-xs text-slate-500">
-                    <span className="font-medium mr-1">{rec.confidence}%</span>
-                    confidence
-                  </div>
-                </div>
-
-                <p className="text-slate-700 mb-3 leading-relaxed">
-                  {rec.content}
-                </p>
-
-                <div className="space-y-1">
-                  <div className="flex justify-between text-xs">
-                    <span className="text-slate-600">AI Confidence Level</span>
-                    <span className="font-medium text-slate-900">{rec.confidence}%</span>
-                  </div>
-                  <Progress value={rec.confidence} className="h-1.5" />
-                </div>
-              </div>
+        {/* Card 1: Study Suggestion */}
+        <div className="bg-blue-50/50 p-3 rounded-lg border border-blue-200 border-2 shadow-sm">
+            <div className="flex justify-between items-center text-sm font-bold mb-1">
+                <span className='font-semibold'>Study Suggestion</span>
+                <span className="text-xs text-green-600">87% confidence</span>
             </div>
-          </div>
-        ))}
-
-        {/* AI Stats */}
-        <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg border border-purple-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <h4 className="font-semibold text-slate-900 mb-1">AI Learning Insights</h4>
-              <p className="text-sm text-slate-600">
-                Based on your learning patterns and performance data
-              </p>
+            <p className="text-xs text-slate-700">Your performance in Statistics is trending down. Consider scheduling study sessions for probability concepts</p>
+        </div>
+        
+        {/* Card 2: Career Path */}
+        <div className="bg-blue-50/50 border-blue-200 p-3 rounded-lg border  shadow-sm">
+            <div className="flex justify-between items-center text-sm font-semibold mb-1">
+                <span>Career Path</span>
+                <span className="text-xs text-green-600">92% confidence</span>
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-purple-600">3</div>
-              <div className="text-xs text-slate-500">Active Recommendations</div>
+            <p className="text-xs text-slate-700">Based on your strong performance in Data Structures, consider exploring Software Engineering roles.</p>
+        </div>
+        
+        {/* Card 3: Learning Resource */}
+        <div className="bg-blue-50/50 p-3 border-blue-200 rounded-lg border  shadow-sm">
+            <div className="flex justify-between items-center text-sm font-semibold mb-1">
+                <span>Learning Resource</span>
+                <span className="text-xs text-green-600">87% confidence</span>
             </div>
-          </div>
+            <p className="text-xs text-slate-700">AI suggests additional video tutorials for Database Normalization concepts.</p>
         </div>
       </CardContent>
     </Card>
-  );
-};
+);
 
 export default AIPersonalizedRecommendations;

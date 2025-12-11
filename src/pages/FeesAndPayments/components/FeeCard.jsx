@@ -1,44 +1,43 @@
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { TrendingUp, TrendingDown } from 'lucide-react';
 
-const FeeCard = ({ title, value, subtext, trend, trendDirection, icon: Icon }) => {
-  const isPositiveTrend = trendDirection === 'up';
-
-  return (
-    <Card className="shadow-md border-slate-100 hover:shadow-lg transition-shadow">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className={`p-2 rounded-lg ${isPositiveTrend ? 'bg-green-50' : 'bg-red-50'}`}>
-            <Icon className={`w-5 h-5 ${isPositiveTrend ? 'text-green-600' : 'text-red-600'}`} />
-          </div>
-          {trend && (
-            <div className={`flex items-center text-sm font-medium ${
-              isPositiveTrend ? 'text-green-600' : 'text-red-600'
-            }`}>
-              {isPositiveTrend ? (
-                <TrendingUp className="w-4 h-4 mr-1" />
-              ) : (
-                <TrendingDown className="w-4 h-4 mr-1" />
-              )}
-              {trend}
-            </div>
-          )}
+const FeeCard = ({ fee, isLightBlue }) => (
+  <Card className={`mb-1 rounded-lg shadow-sm border-none ${isLightBlue ? 'bg-blue-50' : ''}`}>
+    <CardContent className="p-4">
+      <div className="flex justify-between items-center gap-2 text-sm">
+        <div className="flex-shrink-0 text-slate-900 font-semibold">
+          {fee.date}
         </div>
-
-        <div className="space-y-1">
-          <p className="text-sm font-medium text-slate-600">{title}</p>
-          <div className="flex items-baseline space-x-1">
-            <span className="text-2xl font-bold text-slate-900">{value}</span>
-            {subtext && (
-              <span className="text-sm text-slate-500">{subtext}</span>
-            )}
-          </div>
+        <div className="flex-1 text-center text-slate-700">
+          {fee.academicYear}
         </div>
-      </CardContent>
-    </Card>
-  );
-};
+        <div className="flex-1 text-center text-slate-700">
+          {fee.term}
+        </div>
+        <div className="flex-1 text-center text-slate-700">
+          {fee.paymentId}
+        </div>
+        <div className="flex-1 text-center text-slate-700">
+          {fee.receiptNo}
+        </div>
+        <div className="flex-1 text-center text-slate-700">
+          {fee.description}
+        </div>
+        <div className="flex-1 text-center text-slate-700">
+          {fee.remarks}
+        </div>
+        <div className="flex-1 text-right text-slate-700">
+          GH₵{fee.bill.toFixed(2)}
+        </div>
+        <div className="flex-1 text-right text-slate-700">
+          {fee.penalty}
+        </div>
+        <div className="flex-1 text-right font-semibold text-slate-900">
+          GH₵{fee.payment.toFixed(2)}
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
 
 export default FeeCard;

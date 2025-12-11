@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Zap, TrendingUp, Target, Briefcase, ChevronRight, BookOpen, Diamond, Lightbulb, TrendingDown 
 } from 'lucide-react'; // Added Diamond, Lightbulb, TrendingDown for recommendations
@@ -8,72 +8,57 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
-// Mock data (from mockData.js)
-const aiLearningPathMetrics = {
-    aiPredictions: 3,
-    predictedGPA: 3.7,
-    successRate: 92,
-    careerPath: 'Engineering',
-};
-
-const studentCoursesProgress = [
-    { title: 'Mathematics', code: 'MATH303', teacher: 'Sir Antwi Boasiako', lessonsCompleted: 7, totalLessons: 23 },
-    { title: 'Integrated Science', code: 'SCS303', teacher: 'Sir Godffred Kusi', lessonsCompleted: 5, totalLessons: 21 },
-    { title: 'Religious and Moral Education', code: 'RME303', teacher: 'Sir Antwi Boasiako', lessonsCompleted: 8, totalLessons: 24 },
-    { title: 'Creative and Performing Art', code: 'CPA303', teacher: 'Sir Antwi Boasiako', lessonsCompleted: 9, totalLessons: 23 },
-];
-
-const aiRecommendations = {
-  personalized: [
-    {
-      type: 'Study Suggestion',
-      confidence: 87,
-      content: 'Your performance in Religious and Moral Education is trending down. Consider scheduling study sessions for religious concepts.',
-      progress: 87, 
-    },
-    {
-      type: 'Career Path',
-      confidence: 92,
-      content: 'Based on your strong performance in Mathematics, Science and Computing, consider exploring Software Engineering roles.',
-      progress: 92,
-    },
-    {
-      type: 'Learning Resource',
-      confidence: 64,
-      content: 'AI suggests additional video tutorials for Database Normalization concepts.',
-      progress: 64,
-    },
-  ],
-  recommendedResources: [
-    { title: 'Advanced religious and Moral Education', code: 'RME301', type: 'Video', match: 95 },
-    { title: 'Tree Algorithms Practice Problems', code: 'CS202', type: 'Exercise', match: 95 },
-  ],
-};
+import { aiLearningPathMetrics, aiRecommendations, studentCoursesProgress } from '@/lib/mockData';
 
 
-// --- Sub-Component: AI KPI Card ---
+
+// --- Handy Component: AI KPI Card ---
 const AIKpiCard = ({ title, value, subtext, icon: Icon, colorClass }) => (
-    <Card className="shadow-lg border-l-4 border-slate-100 bg-white hover:border-l-blue-600 transition-colors">
-        <CardContent className="p-6">
-            <div className="flex items-center space-x-3 mb-4">
-                <div className={`p-2 rounded-full flex-shrink-0 ${colorClass.bg}`}>
-                    <Icon className={`w-6 h-6 ${colorClass.text}`} />
-                </div>
-                <CardTitle className="text-lg font-semibold text-slate-900">{title}</CardTitle>
+    <Card className="shadow-lg bg-gradient-to-r from-[#CDFFFB]/50 via-[#FFEDED]/10 via-[#E5FEE9]/25 to-[#D8DAFE]/50 transition-colors">
+        <CardContent className="p-2 sm:p-4">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+                <CardTitle className="text-md sm:text-lg lg:text-xl font-semibold text-slate-900 flex items-center">
+                    <Icon className={`w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-2 ${colorClass.text}`} />
+                    {title}
+                </CardTitle>
             </div>
-            
-            <p className="text-4xl font-extrabold text-slate-900 mb-1">
+
+            <p className="text-lg sm:text-xl lg:text-2xl font-extrabold text-slate-900 mb-1">
                 {value}
             </p>
-            <p className="text-sm text-slate-500">{subtext}</p>
+
+            <div className="flex justify-between items-center text-[10px] mt-3">
+                <p className="text-slate-500 whitespace-nowrap">{subtext}</p>
+            </div>
         </CardContent>
     </Card>
 );
 
 // --- Sub-Component: Course Progress Item ---
 const CourseProgressItem = ({ title, code, teacher, completed, total }) => {
-    const percentage = (completed / total) * 100;
+    const percentage = total > 0 ? (completed / total) * 100 : 0;
+    const [currentProgress, setCurrentProgress] = useState(0);
+
+    React.useEffect(() => {
+        let start = 0;
+        const end = percentage;
+        const duration = 1000; // 1 second
+        const increment = end / (duration / 16); // 60fps
+
+        const timer = setInterval(() => {
+            start += increment;
+            if (start >= end) {
+                setCurrentProgress(end);
+                clearInterval(timer);
+            } else {
+                setCurrentProgress(start);
+            }
+        }, 16);
+
+        return () => clearInterval(timer);
+    }, [percentage]);
 
     return (
         <div className="p-4 bg-white rounded-lg shadow-sm border border-slate-100 mb-4 last:mb-0">
@@ -88,7 +73,7 @@ const CourseProgressItem = ({ title, code, teacher, completed, total }) => {
                     {completed}/{total} Lessons
                 </span>
             </div>
-            <Progress value={percentage} className="h-2 bg-slate-200" indicatorColor="bg-blue-600" />
+            <Progress value={currentProgress} className="h-2 bg-slate-200" indicatorClassName="bg-blue-600 transition-all duration-1000 ease-out" />
         </div>
     );
 };
@@ -108,6 +93,27 @@ const RecommendationItem = ({ type, confidence, content, progress }) => {
         colorClass = 'text-purple-600';
     }
 
+    const [currentProgress, setCurrentProgress] = useState(0);
+
+    React.useEffect(() => {
+        let start = 0;
+        const end = progress;
+        const duration = 1000; // 1 second
+        const increment = end / (duration / 16); // 60fps
+
+        const timer = setInterval(() => {
+            start += increment;
+            if (start >= end) {
+                setCurrentProgress(end);
+                clearInterval(timer);
+            } else {
+                setCurrentProgress(start);
+            }
+        }, 16);
+
+        return () => clearInterval(timer);
+    }, [progress]);
+
     return (
         <div className="p-4 bg-white/70 backdrop-blur-sm rounded-lg border border-slate-100 shadow-sm space-y-2">
             <div className="flex justify-between items-center">
@@ -120,7 +126,7 @@ const RecommendationItem = ({ type, confidence, content, progress }) => {
                 </div>
             </div>
             <p className="text-sm text-slate-600 leading-relaxed">{content}</p>
-            <Progress value={progress} className="h-2 bg-blue-200" indicatorColor="bg-blue-600" />
+            <Progress value={currentProgress} className="h-2 bg-blue-200" indicatorClassName="bg-blue-600 transition-all duration-1000 ease-out" />
         </div>
     );
 };
@@ -142,13 +148,36 @@ const ResourceItem = ({ title, code, type, match }) => (
 
 // --- Main Component: AILearningPath ---
 const AILearningPath = () => {
+  const [expandedCards, setExpandedCards] = useState({
+    courses: false,
+    recommendations: false,
+    resources: false,
+  });
+
+  const toggleCard = (cardName) => {
+    setExpandedCards(prev => ({
+      ...prev,
+      [cardName]: !prev[cardName]
+    }));
+  };
+
   return (
     <div className="p-0 space-y-8">
       
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Student Dashboard / AI Learning Path</h1>
+            <Breadcrumb>
+              <BreadcrumbList className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/" className="text-slate-500">Student Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="text-base text-slate-500">/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="font-bold text-base">AI Learning Path</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
             <p className="text-md text-slate-600 mt-1">
                 Machine learning driven insights to guide your academic and career success.
             </p>
@@ -203,12 +232,16 @@ const AILearningPath = () => {
                 Courses are based on the current GES curriculum for all Basic Schools
             </p>
           </div>
-          <Button variant="link" className="text-blue-600 p-0 h-auto text-sm">
-            See all
+          <Button
+            variant="link"
+            className="text-blue-600 p-0 h-auto text-sm"
+            onClick={() => toggleCard('courses')}
+          >
+            {expandedCards.courses ? 'See less' : 'See all'}
           </Button>
         </CardHeader>
         <CardContent className="p-4 pt-2 space-y-3">
-            {studentCoursesProgress.map((course, index) => (
+            {studentCoursesProgress.slice(0, expandedCards.courses ? studentCoursesProgress.length : 2).map((course, index) => (
                 <CourseProgressItem
                     key={index}
                     title={course.title}
@@ -228,15 +261,19 @@ const AILearningPath = () => {
             <Diamond className="w-5 h-5 mr-2 text-blue-600" />
             <CardTitle className="text-xl font-bold text-slate-900">Personalized Recommendations</CardTitle>
           </div>
-          <Button variant="link" className="text-blue-600 p-0 h-auto">
-            See all
+          <Button
+            variant="link"
+            className="text-blue-600 p-0 h-auto"
+            onClick={() => toggleCard('recommendations')}
+          >
+            {expandedCards.recommendations ? 'See less' : 'See all'}
           </Button>
         </CardHeader>
         <CardContent className="p-4 pt-0 space-y-4">
           <p className="text-sm text-slate-500">
             Machine learning insights for your academic success and career path
           </p>
-          {aiRecommendations.personalized.map((rec, index) => (
+          {aiRecommendations.personalized.slice(0, expandedCards.recommendations ? aiRecommendations.personalized.length : 2).map((rec, index) => (
             <RecommendationItem
               key={index}
               type={rec.type}
@@ -257,12 +294,16 @@ const AILearningPath = () => {
               Curated materials based on your courses • Courses are based on the current GES curriculum for all Basic Schools
             </p>
           </div>
-          <Button variant="link" className="text-blue-600 p-0 h-auto">
-            See all
+          <Button
+            variant="link"
+            className="text-blue-600 p-0 h-auto"
+            onClick={() => toggleCard('resources')}
+          >
+            {expandedCards.resources ? 'See less' : 'See all'}
           </Button>
         </CardHeader>
         <CardContent className="p-4 pt-0 space-y-4">
-          {aiRecommendations.recommendedResources.map((resource, index) => (
+          {aiRecommendations.recommendedResources.slice(0, expandedCards.resources ? aiRecommendations.recommendedResources.length : 2).map((resource, index) => (
             <ResourceItem
               key={index}
               title={resource.title}

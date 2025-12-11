@@ -1,49 +1,67 @@
 import React from 'react';
-import { 
-  Printer, TrendingUp, BookOpen, User 
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { setShowDownloadModal } from '../../store/resultsSlice';
+import {
+  Printer, BookOpen, ChevronDown, List, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 // Shadcn Components
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
-import { academicResults } from '@/lib/mockData'; // Ensure you have this mock data
+// Custom Components
+import DownloadNoticeModal from '@/components/DownloadNoticeModal';
+import ResultField from './components/ResultField';
 
-// --- Sub-Component: Collapsed Result Card ---
-const CollapsedResultCard = ({ academicYear, academicTerm }) => (
-    <Card className="shadow-md border-slate-100">
-        <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h3 className="text-lg font-semibold text-slate-900">
-                        Academic Year: {academicYear}
-                    </h3>
-                    <p className="text-sm text-slate-600">
-                        Term: {academicTerm}
-                    </p>
-                </div>
-                <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
-                    View Details
-                </Button>
-            </div>
-        </CardContent>
-    </Card>
-);
+// Mock data (assuming the updated mock data is available)
+import { academicResults, historicalAcademicResults } from '@/lib/mockData';
+
+const allResults = [academicResults, ...historicalAcademicResults];
+
 
 // --- Main Component: Results ---
 const Results = () => {
+   const navigate = useNavigate();
+   const dispatch = useDispatch();
+   const showDownloadModal = useSelector((state) => state.results.showDownloadModal);
+
+  const handleDownload = () => {
+    // Handle the actual download logic here
+    console.log('Downloading results...');
+    // You can add actual download functionality here
+    // For example: window.open('/api/download-results', '_blank');
+    dispatch(setShowDownloadModal(false));
+  };
+
   return (
     <div className="p-0 space-y-8">
       
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Student Dashboard / Results</h1>
-            <p className="text-md text-slate-600 mt-1">
-                Student Academic Performance Results
+            <Breadcrumb>
+              <BreadcrumbList className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-slate-900 tracking-tight">
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    className="text-slate-500 cursor-pointer hover:text-blue-600 transition-colors"
+                    onClick={() => navigate('/')}
+                  >
+                    Student Dashboard
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="text-base text-slate-500">/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="font-bold text-base">Results</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <p className="text-sm sm:text-md lg:text-lg text-slate-600 mt-1">
+              Student Academic Performance Results
             </p>
         </div>
         <div className="flex space-x-2">
@@ -58,104 +76,175 @@ const Results = () => {
       </div>
 
       <Separator className="bg-slate-200" />
-      
-      {/* Academic Result Card */}
-      <Card className="shadow-lg border-slate-100 p-0">
-        <CardHeader className="flex flex-row items-center justify-between p-4 bg-blue-50/50">
-          <div className="flex items-center space-x-6">
-            <CardTitle className="text-xl font-bold text-slate-900 flex items-center">
-              <BookOpen className="w-5 h-5 mr-2 text-blue-600" />
-              Academic Result
-            </CardTitle>
-            <span className="text-sm text-slate-600">
-                Academic Year : **{academicResults.academicYear}**
-            </span>
-            <span className="text-sm text-slate-600">
-                Academic Term : **{academicResults.academicTerm}**
-            </span>
-          </div>
-          <Button variant="outline" className="text-blue-600 border-blue-200 hover:bg-blue-50">
-            <Printer className="w-4 h-4 mr-2" />
-            Print Result
-          </Button>
-        </CardHeader>
-        
-        <CardContent className="p-0 overflow-x-auto">
-          <Table className="min-w-[1000px]">
-            <TableHeader>
-              <TableRow className="bg-blue-600 hover:bg-blue-600 text-white">
-                <TableHead className="text-white text-sm">Subject code</TableHead>
-                <TableHead className="text-white text-sm">Subject</TableHead>
-                <TableHead className="text-white text-sm text-center">Class Score (50)</TableHead>
-                <TableHead className="text-white text-sm text-center">Exam Score (50)</TableHead>
-                <TableHead className="text-white text-sm text-center">Total Marks (100)</TableHead>
-                <TableHead className="text-white text-sm text-center">Grade</TableHead>
-                <TableHead className="text-white text-sm text-center">Position</TableHead>
-                <TableHead className="text-white text-sm">Remarks</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {academicResults.data.map((item, index) => (
-                <TableRow key={index} className="hover:bg-slate-50">
-                  <TableCell className="text-sm">{item.code}</TableCell>
-                  <TableCell className="text-sm font-medium text-slate-800">{item.subject}</TableCell>
-                  <TableCell className="text-center">{item.classScore}</TableCell>
-                  <TableCell className="text-center">{item.examScore}</TableCell>
-                  <TableCell className="text-center font-bold">{item.total}</TableCell>
-                  <TableCell className={`text-center font-bold ${item.grade === 'A' ? 'text-green-600' : item.grade === 'D' ? 'text-red-600' : 'text-yellow-600'}`}>
-                    {item.grade}
-                  </TableCell>
-                  <TableCell className="text-center font-semibold">{item.position}</TableCell>
-                  <TableCell className="text-sm text-slate-600">{item.remarks}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-        
-        {/* Footer/Signature Section - Mimicking the layout */}
-        <div className="p-6 grid grid-cols-3 gap-12 text-sm">
-            {/* Row 1: Key Info */}
-            <div className="space-y-4">
-                <p className="font-semibold text-slate-700 border-b border-slate-300 pb-1">Attendance:</p>
-                <p className="text-slate-600">
-                    <span className="font-bold">{academicResults.attendance.total}</span> out of <span className="font-bold">{academicResults.attendance.outOf}</span>
-                </p>
-            </div>
-            <div className="space-y-4">
-                <p className="font-semibold text-slate-700 border-b border-slate-300 pb-1">Conduct:</p>
-                <p className="text-slate-600">{academicResults.conduct}</p>
-            </div>
-            <div className="space-y-4">
-                <p className="font-semibold text-slate-700 border-b border-slate-300 pb-1">Talent and Interest:</p>
-                <p className="text-slate-600">{academicResults.talentInterest}</p>
-            </div>
 
-            {/* Row 2: Teacher Remarks */}
-            <div className="col-span-3 pt-6">
-                <p className="font-semibold text-slate-700">Class Teacher's Remarks:</p>
-                <p className="text-slate-600 border-b border-slate-300 pb-2">{academicResults.classTeacherRemarks}</p>
-            </div>
+      {/* Academic Result Cards (Accordion View) */}
+      <Accordion type="single" collapsible defaultValue="item-0" className="w-full">
+        {allResults.map((result, index) => (
+          <AccordionItem key={index} value={`item-${index}`}>
+            <AccordionTrigger className="hover:no-underline">
+              <div className="flex items-center justify-between w-full p-3 sm:p-4 lg:p-6 shadow-sm border-slate-100 hover:shadow-md transition-shadow">
+                <div className="flex items-center space-x-3 sm:space-x-4 lg:space-x-6">
+                  <div className="text-base sm:text-lg lg:text-xl font-bold text-slate-900 flex items-center">
+                    <BookOpen className="w-3 h-3 sm:w-4 sm:h-4 mr-2 text-blue-600" />
+                    Academic Result
+                  </div>
+                  <span className="text-xs sm:text-sm lg:text-base text-slate-500">
+                    Academic Year : {result.academicYear} | Academic Term : {result.academicTerm}
+                  </span>
+                </div>
+                {index === 0 && (
+                  <Button
+                    variant="outline"
+                    className="text-blue-600 border-blue-200 hover:bg-blue-50 text-xs sm:text-sm lg:text-base"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      dispatch(setShowDownloadModal(true));
+                    }}
+                  >
+                    <Printer className="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                    Print Result
+                  </Button>
+                )}
+              </div>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Card className="mt-2 shadow-lg border-slate-100 p-0">
+                <CardContent className="p-4">
+                  {/* Header Row */}
+                  <Card className="mb-2 rounded-lg shadow-sm border-slate-200 bg-blue-600">
+                    <CardContent className="p-2 sm:p-4">
+                      <div className="flex justify-between items-center gap-1 sm:gap-2">
+                        <div className="text-xs sm:text-sm lg:text-base font-bold text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-center flex-shrink-0">
+                          Subject Code
+                        </div>
+                        <div className="flex gap-1 sm:gap-2 flex-1 justify-end">
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Subject
+                          </div>
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Class Score (50)
+                          </div>
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Exam Score (50)
+                          </div>
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Total Marks (100)
+                          </div>
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Grade
+                          </div>
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Position
+                          </div>
+                          <div className="text-xs sm:text-sm lg:text-base font-bold text-white text-center flex-1">
+                            Remarks
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
 
-            {/* Row 3: Signature Lines */}
-            <div className="pt-8 flex flex-col items-start">
-                <div className="w-4/5 border-b border-dashed border-slate-400 h-6"></div>
-                <p className="text-xs text-slate-500 mt-1">Head Teacher's Signature</p>
-            </div>
-            <div className="pt-8 flex flex-col items-center">
-                <div className="w-4/5 border-b border-dashed border-slate-400 h-6"></div>
-                <p className="text-xs text-slate-500 mt-1">Class Teacher's Signature</p>
-            </div>
-        </div>
-      </Card>
+                  {/* Result Row Cards */}
+                  <div className="space-y-1">
+                    {result.data.map((res, idx) => (
+                      <Card key={idx} className={`mb-1 rounded-lg shadow-sm border-slate-200 ${idx % 2 === 1 ? 'bg-blue-50' : ''}`}>
+                        <CardContent className="p-2 sm:p-4">
+                          <div className="flex justify-between items-center gap-1 sm:gap-2">
+                            {/* Subject Code */}
+                            <div className="text-xs sm:text-sm lg:text-base font-semibold text-slate-900 px-2 sm:px-3 py-1 sm:py-2 rounded-md text-center flex-shrink-0">
+                              {res.code}
+                            </div>
+
+                            {/* Data Columns */}
+                            <div className="flex gap-1 sm:gap-2 flex-1 justify-end">
+                              <div className="text-center flex-1">
+                                <div className="w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-medium text-center text-slate-700">
+                                  {res.subject}
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-medium text-center text-slate-700">
+                                  {res.classScore}
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-medium text-center text-slate-700">
+                                  {res.examScore}
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-bold text-center text-slate-700">
+                                  {res.total}
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className={`w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-bold text-center ${res.grade === 'A' ? 'text-green-600' : res.grade === 'D' ? 'text-red-600' : 'text-yellow-600'}`}>
+                                  {res.grade}
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-semibold text-center text-slate-700">
+                                  {res.position}
+                                </div>
+                              </div>
+                              <div className="text-center flex-1">
+                                <div className="w-full px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm lg:text-base font-medium text-center text-slate-700">
+                                  {res.remarks}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+
+                {/* Footer/Signature Section */}
+                <div className="p-3 sm:p-4 lg:p-6 bg-blue-50/50 rounded-b-lg">
+                  <div className="grid grid-cols-6 gap-x-3 sm:gap-x-4 lg:gap-x-6 gap-y-2 sm:gap-y-3 lg:gap-y-4 text-xs sm:text-sm lg:text-base">
+                    <ResultField label="Attendance" value={`${result.attendance.total}/${result.attendance.outOf}`} />
+                    <ResultField label="Out of Total Of" value={result.attendance.outOf} />
+                    <div className="col-span-2"></div>
+                    <ResultField label="Talent and Interest" value={result.talentInterest} large={true} />
+                    <ResultField label="Conduct" value={result.conduct} />
+                    <div className="col-span-2"></div>
+                    <ResultField label="Class Teacher's Remarks" value={result.classTeacherRemarks} large={true} />
+                    <div className="col-span-2"></div>
+                    <div className="col-span-2">
+                      <ResultField label="Head Teacher's Remarks" value={result.headTeacherRemarks} />
+                    </div>
+                    <div className="col-span-2">
+                      <ResultField label="Head Teacher's Signature" value={''} />
+                    </div>
+                    <div className="col-span-2">
+                      <ResultField label="Class Teacher's Signature" value={''} />
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
       
-      {/* 2. Historical Result Cards (Collapsed View) */}
-      <CollapsedResultCard academicYear="2023/2024" academicTerm="1" />
-      <CollapsedResultCard academicYear="2022/2023" academicTerm="3" />
-      {/* Pagination placeholder */}
-      <div className="flex justify-end items-center text-sm text-slate-500 pt-4">
-        {/* Actual pagination component would go here */}
+      {/* Pagination (Matching Schedule.jsx) */}
+      <div className="flex justify-center items-center pt-4">
+        <Button variant="outline" size="icon" className="rounded-full mr-2">
+          <ChevronLeft className="w-5 h-5" />
+        </Button>
+        <span className="text-sm text-slate-600">Page 1 of 10</span>
+        <Button variant="outline" size="icon" className="rounded-full ml-2">
+          <ChevronRight className="w-5 h-5" />
+        </Button>
       </div>
+
+      {/* Download Notice Modal */}
+      <DownloadNoticeModal
+        isOpen={showDownloadModal}
+        onClose={() => dispatch(setShowDownloadModal(false))}
+        onDownload={handleDownload}
+      />
 
     </div>
   );

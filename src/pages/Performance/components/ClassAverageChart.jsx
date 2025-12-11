@@ -1,98 +1,53 @@
 import React from 'react';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend
-} from 'recharts';
-import { classAverageData } from '@/lib/mockData';
+import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from '@/components/ui/chart';
+import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 
 const ClassAverageChart = () => {
-  const data = classAverageData.map(item => ({
-    test: item.test,
-    'Class Average': item.classAvg,
-    'Your Mark': item.studentMark,
-  }));
+    const chartConfig = {
+        classAvg: {
+            label: "Class Average",
+            color: "var(--chart-1)",
+        },
+        studentMark: {
+            label: "Your Mark",
+            color: "var(--chart-2)",
+        },
+    };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-3 border border-slate-200 rounded-lg shadow-lg">
-          <p className="font-medium text-slate-900">{`Test: ${label}`}</p>
-          {payload.map((entry, index) => (
-            <p key={index} style={{ color: entry.color }} className="text-sm">
-              {`${entry.dataKey}: ${entry.value}`}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+    // Assuming classAverageData is imported or passed as prop
+    const classAverageData = [
+        { test: 'Test 1', classAvg: 75, studentMark: 80 },
+        { test: 'Test 2', classAvg: 78, studentMark: 85 },
+        { test: 'Test 3', classAvg: 82, studentMark: 88 },
+        { test: 'Test 4', classAvg: 85, studentMark: 90 },
+        { test: 'Test 5', classAvg: 88, studentMark: 92 },
+    ];
 
-  return (
-    <div className="w-full">
-      <ResponsiveContainer width="100%" height={300}>
-        <BarChart
-          data={data}
-          margin={{
-            top: 20,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-          <XAxis
-            dataKey="test"
-            tick={{ fontSize: 12, fill: '#64748b' }}
-            axisLine={{ stroke: '#e2e8f0' }}
-          />
-          <YAxis
-            tick={{ fontSize: 12, fill: '#64748b' }}
-            axisLine={{ stroke: '#e2e8f0' }}
-            label={{ value: 'Score', angle: -90, position: 'insideLeft' }}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend
-            wrapperStyle={{ paddingTop: '20px' }}
-          />
-          <Bar
-            dataKey="Class Average"
-            fill="#94a3b8"
-            radius={[4, 4, 0, 0]}
-            name="Class Average"
-          />
-          <Bar
-            dataKey="Your Mark"
-            fill="#3b82f6"
-            radius={[4, 4, 0, 0]}
-            name="Your Mark"
-          />
-        </BarChart>
-      </ResponsiveContainer>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-2 gap-4 mt-6">
-        <div className="text-center p-3 bg-slate-50 rounded-lg">
-          <div className="text-lg font-semibold text-slate-900">
-            {Math.round(data.reduce((acc, item) => acc + item['Your Mark'], 0) / data.length)}
-          </div>
-          <div className="text-sm text-slate-600">Your Average</div>
-        </div>
-        <div className="text-center p-3 bg-blue-50 rounded-lg">
-          <div className="text-lg font-semibold text-blue-600">
-            {Math.round(data.reduce((acc, item) => acc + item['Class Average'], 0) / data.length)}
-          </div>
-          <div className="text-sm text-slate-600">Class Average</div>
-        </div>
-      </div>
-    </div>
-  );
+    return (
+        <ChartContainer config={chartConfig} className="h-[180px] sm:h-[230px] lg:h-[295px] w-full text-xs">
+            <RechartsBarChart data={classAverageData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                    dataKey="test"
+                    tickLine={false}
+                    tickMargin={10}
+                    axisLine={false}
+                />
+                <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tickMargin={8}
+                />
+                <ChartTooltip
+                    cursor={false}
+                    content={<ChartTooltipContent indicator="dot" />}
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+                <Bar dataKey="classAvg" fill="#7E00D8" radius={4} />
+                <Bar dataKey="studentMark" fill="#FF928A" radius={4} />
+            </RechartsBarChart>
+        </ChartContainer>
+    );
 };
 
 export default ClassAverageChart;

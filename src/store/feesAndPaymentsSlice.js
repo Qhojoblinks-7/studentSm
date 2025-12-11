@@ -1,39 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { feeData } from '../lib/mockData';
 
 const initialState = {
-  feeData: feeData,
-  loading: false,
-  error: null,
+  expandedFees: false,
+  expandedHistory: false,
+  isPaymentModalOpen: false,
+  showPaymentPage: false,
 };
 
 const feesAndPaymentsSlice = createSlice({
   name: 'feesAndPayments',
   initialState,
   reducers: {
-    fetchFeesStart: (state) => {
-      state.loading = true;
-      state.error = null;
+    setExpandedFees: (state, action) => {
+      state.expandedFees = action.payload;
     },
-    fetchFeesSuccess: (state, action) => {
-      state.loading = false;
-      state.feeData = action.payload;
+    setExpandedHistory: (state, action) => {
+      state.expandedHistory = action.payload;
     },
-    fetchFeesFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+    setIsPaymentModalOpen: (state, action) => {
+      state.isPaymentModalOpen = action.payload;
     },
-    updateFeeData: (state, action) => {
-      state.feeData = { ...state.feeData, ...action.payload };
+    setShowPaymentPage: (state, action) => {
+      state.showPaymentPage = action.payload;
     },
   },
 });
 
-export const {
-  fetchFeesStart,
-  fetchFeesSuccess,
-  fetchFeesFailure,
-  updateFeeData,
-} = feesAndPaymentsSlice.actions;
-
+export const { setExpandedFees, setExpandedHistory, setIsPaymentModalOpen, setShowPaymentPage } = feesAndPaymentsSlice.actions;
 export default feesAndPaymentsSlice.reducer;

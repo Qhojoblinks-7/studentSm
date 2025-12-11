@@ -1,109 +1,125 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { DollarSign, CreditCard, Receipt, TrendingUp } from 'lucide-react';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Shadcn Components
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 
-// Components
-import FeeCard from './components/FeeCard';
+import { feeData } from '@/lib/mockData';
+import MakePaymentModal from '../../components/MakePaymentModal.jsx';
+import FeesPayments from '../FeesPayments/FeesPayments.jsx';
 import FeeSummarySection from './components/FeeSummarySection';
 import FeesBreakdownTable from './components/FeesBreakdownTable';
 import PaymentHistorySection from './components/PaymentHistorySection';
+import { setExpandedFees, setExpandedHistory, setIsPaymentModalOpen, setShowPaymentPage } from '../../store/feesAndPaymentsSlice';
 
-// Data
-import { feeData, headmasterKPIData } from '@/lib/mockData';
 
+// --- Main Component: FeesAndPayments ---
 const FeesAndPayments = () => {
-  const feeKPIs = headmasterKPIData.filter(kpi =>
-    ['Total Enrollment', 'Academic Success Rate', 'Budget Surplus/Deficit'].includes(kpi.title)
-  );
+  const { expandedFees, expandedHistory, isPaymentModalOpen, showPaymentPage } = useSelector(state => state.feesAndPayments);
+  const dispatch = useDispatch();
+
+  // Hardcoded totals from the image for visual accuracy
+  const imageTotalBill = 6945.00;
+  const imageTotalPayment = 6945.25;
+  const imageBalance = 0.25;
+
+  const handleMakePayment = () => {
+    dispatch(setIsPaymentModalOpen(true));
+  };
+
+  const handlePrintStatement = () => {
+    alert('Printing fee statement...');
+    window.print();
+  };
+
+  const handleAccessReceipt = (title) => {
+    alert(`Accessing receipt for: ${title}`);
+    // In a real app, this would open/download the receipt
+  };
+
+  if (showPaymentPage) {
+    return (
+      <div className="p-0 space-y-8">
+        {/* Header for Payment Page */}
+        <div className="flex justify-between items-center">
+          <div>
+              <Breadcrumb>
+                <BreadcrumbList className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/" className="text-slate-500">Student Dashboard</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator className="text-base text-slate-500">/</BreadcrumbSeparator>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/fees-payments" className="text-slate-500">Fees and Payment</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator className="text-base text-slate-500">/</BreadcrumbSeparator>
+                  <BreadcrumbItem>
+                    <BreadcrumbPage className="font-bold text-base">Make Payment</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
+              <p className="text-md text-slate-600 mt-1">
+                  Complete your payment securely.
+              </p>
+          </div>
+        </div>
+
+        <Separator className="bg-slate-200" />
+
+        <FeesPayments onCancel={() => {
+          dispatch(setShowPaymentPage(false));
+          dispatch(setIsPaymentModalOpen(true));
+        }} />
+      </div>
+    );
+  }
 
   return (
     <div className="p-0 space-y-8">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+
+      {/* Header (Matching Dashboard image structure) */}
+      <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Fees & Payments
-          </h1>
-          <p className="text-sm lg:text-md text-slate-600 mt-1">
-            Manage your school fees, payments, and financial records
-          </p>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="flex items-center space-x-3">
-          <Button variant="outline">
-            <Receipt className="w-4 h-4 mr-2" />
-            Download Statement
-          </Button>
-          <Button>
-            <CreditCard className="w-4 h-4 mr-2" />
-            Make Payment
-          </Button>
+            <Breadcrumb>
+              <BreadcrumbList className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/" className="text-slate-500">Student Dashboard</BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="text-base text-slate-500">/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="font-bold text-base">Fees and Payment</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
+            <p className="text-md text-slate-600 mt-1">
+                Manage your fee payment and view history.
+            </p>
         </div>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {feeKPIs.map((kpi) => (
-          <FeeCard
-            key={kpi.id}
-            title={kpi.title}
-            value={kpi.value}
-            subtext={kpi.unit}
-            trend={kpi.trend}
-            trendDirection={kpi.trendDirection}
-            icon={DollarSign}
-          />
-        ))}
-      </div>
+      <Separator className="bg-slate-200" />
+      
+      {/* 1. Fee Summary KPIs and Action Buttons (Exact visual layout) */}
+      <FeeSummarySection feeData={feeData} handleMakePayment={handleMakePayment} handlePrintStatement={handlePrintStatement} />
+      
+      {/* 2. Fees Breakdown Table */}
+      <FeesBreakdownTable expandedFees={expandedFees} onExpandedFeesChange={(value) => dispatch(setExpandedFees(value))} feeData={feeData} imageTotalBill={imageTotalBill} imageTotalPayment={imageTotalPayment} imageBalance={imageBalance} />
+      
+      {/* 3. Payment History Section */}
+      <PaymentHistorySection expandedHistory={expandedHistory} onExpandedHistoryChange={(value) => dispatch(setExpandedHistory(value))} feeData={feeData} handleAccessReceipt={handleAccessReceipt} />
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left Column */}
-        <div className="space-y-6">
-          <FeeSummarySection />
-          <PaymentHistorySection />
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-6">
-          <FeesBreakdownTable />
-
-          {/* Quick Payment Options */}
-          <Card className="shadow-lg border-slate-100">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-bold text-slate-900 flex items-center">
-                <CreditCard className="w-5 h-5 mr-2 text-blue-600" />
-                Quick Payment
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" className="h-16 flex flex-col items-center justify-center">
-                  <CreditCard className="w-6 h-6 mb-1" />
-                  <span className="text-sm">Card Payment</span>
-                </Button>
-                <Button variant="outline" className="h-16 flex flex-col items-center justify-center">
-                  <DollarSign className="w-6 h-6 mb-1" />
-                  <span className="text-sm">Bank Transfer</span>
-                </Button>
-                <Button variant="outline" className="h-16 flex flex-col items-center justify-center">
-                  <Receipt className="w-6 h-6 mb-1" />
-                  <span className="text-sm">Mobile Money</span>
-                </Button>
-                <Button variant="outline" className="h-16 flex flex-col items-center justify-center">
-                  <TrendingUp className="w-6 h-6 mb-1" />
-                  <span className="text-sm">Installments</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+      {/* Payment Modal */}
+      <MakePaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => dispatch(setIsPaymentModalOpen(false))}
+        onSubmit={(data) => {
+          console.log("Final payment data:", data);
+          // Handle final payment processing here
+          dispatch(setIsPaymentModalOpen(false));
+          dispatch(setShowPaymentPage(true));
+        }}
+      />
     </div>
   );
 };

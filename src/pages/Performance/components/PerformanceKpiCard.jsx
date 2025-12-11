@@ -1,68 +1,39 @@
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
-const PerformanceKpiCard = ({
-  title,
-  value,
-  max,
-  change,
-  subtext,
-  icon: Icon,
-  isRank = false
-}) => {
-  const isPositiveChange = change > 0;
-  const percentage = max ? Math.round((value / max) * 100) : 0;
+const PerformanceKpiCard = ({ title, value, subtext, max, change, icon: Icon, isRank }) => {
+    const isPositive = change > 0;
+    const changeColor = isPositive ? 'text-green-600' : 'text-red-600';
+    const ChangeIcon = isPositive ? TrendingUp : TrendingDown;
 
-  return (
-    <Card className="shadow-md border-slate-100 hover:shadow-lg transition-shadow">
-      <CardContent className="p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className={`p-2 rounded-lg ${isRank ? 'bg-purple-50' : 'bg-blue-50'}`}>
-            <Icon className={`w-5 h-5 ${isRank ? 'text-purple-600' : 'text-blue-600'}`} />
-          </div>
-          {change !== undefined && (
-            <div className={`flex items-center text-sm font-medium ${
-              isPositiveChange ? 'text-green-600' : 'text-red-600'
-            }`}>
-              {isPositiveChange ? (
-                <TrendingUp className="w-4 h-4 mr-1" />
-              ) : (
-                <TrendingDown className="w-4 h-4 mr-1" />
-              )}
-              {isPositiveChange ? '+' : ''}{change}
-            </div>
-          )}
-        </div>
+    return (
+        <Card className="shadow-lg bg-gradient-to-r from-[#CDFFFB]/50 via-[#FFEDED]/10 via-[#E5FEE9]/25 to-[#D8DAFE]/50 transition-colors">
+            <CardContent className="p-2 sm:p-4">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                    <CardTitle className="text-md sm:text-lg lg:text-xl font-semibold text-slate-900 flex items-center">
+                        <Icon className={`w-3 h-3 sm:w-4 sm:h-4 lg:w-5 lg:h-5 mr-2 text-red-600`} />
+                        {title}
+                    </CardTitle>
+                </div>
 
-        <div className="space-y-2">
-          <div>
-            <p className="text-sm font-medium text-slate-600">{title}</p>
-            <div className="flex items-baseline space-x-1">
-              <span className="text-2xl font-bold text-slate-900">
-                {isRank ? `${value}/${max}` : value}
-              </span>
-              {!isRank && max && (
-                <span className="text-sm text-slate-500">/ {max}</span>
-              )}
-            </div>
-          </div>
+                <p className="text-lg sm:text-md lg:text-xl font-extrabold text-slate-900 mb-1">
+                    {value}  <span className="text-sm sm:text-lg lg:text-md font-semibold text-slate-500"> / {max}</span>
+                </p>
 
-          {max && !isRank && (
-            <div className="space-y-1">
-              <Progress value={percentage} className="h-1.5" />
-              <p className="text-xs text-slate-500">{percentage}% of maximum</p>
-            </div>
-          )}
-
-          {subtext && (
-            <p className="text-xs text-slate-500 mt-2">{subtext}</p>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
+                <div className="flex justify-between items-center text-[10px] mt-3">
+                    <p className="text-slate-500 whitespace-nowrap">{subtext}</p>
+                    {isRank ? (
+                        <p className={`font-semibold text-slate-600 whitespace-nowrap`}>in your cohort</p>
+                    ) : (
+                        <p className={`font-semibold ${changeColor} whitespace-nowrap`}>
+                            {change > 0 && '+'}{change} from last sem
+                        </p>
+                    )}
+                </div>
+            </CardContent>
+        </Card>
+    );
 };
 
 export default PerformanceKpiCard;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  Download, Eye, Clock, CheckCircle, Upload, ChevronLeft, ChevronRight 
+import { useNavigate } from 'react-router-dom';
+import {
+  Download, Eye, Clock, CheckCircle, Upload, ChevronLeft, ChevronRight
 } from 'lucide-react';
 
 // Shadcn Components
@@ -8,6 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
+
+// Custom Components
+import DownloadNoticeModal from '@/components/DownloadNoticeModal';
 
 import { studentAssignments } from '@/lib/mockData';
 
@@ -54,7 +59,7 @@ const StatusBadge = ({ status, grade }) => {
 };
 
 // --- Sub-Component: Individual Assignment Card ---
-const AssignmentCard = ({ assignment }) => {
+const AssignmentCard = ({ assignment, onSubmitWork, onDownloadWork }) => {
   const { 
     courseTitle, courseCode, teacher, assignmentName, status, daysLeft, grade, timeOver, score 
   } = assignment;
@@ -72,13 +77,14 @@ const AssignmentCard = ({ assignment }) => {
   // Determine button state and label for submission
   const SubmitButton = () => {
     const isCompleted = status === 'Closed' || status === 'Submitted' || status === 'Graded' || status === 'Awaiting Grade';
-    
+
     return (
-      <Button 
+      <Button
         className={`
             ${!isCompleted ? "bg-blue-600 hover:bg-blue-700" : "bg-slate-200 text-slate-500"}
         `}
         disabled={isCompleted}
+        onClick={!isCompleted ? onSubmitWork : undefined}
       >
         {!isCompleted ? <Upload className="w-4 h-4 mr-2" /> : <CheckCircle className="w-4 h-4 mr-2" />}
         {!isCompleted ? 'Submit Work' : 'Submitted'}
@@ -87,56 +93,57 @@ const AssignmentCard = ({ assignment }) => {
   };
 
   return (
-    <Card className="shadow-md border-slate-100 rounded-xl overflow-hidden mb-4">
-      <CardContent className="flex justify-between items-center p-4">
-        
-        {/* Left Section: Course Info, Assignment Title, Buttons */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center space-x-3 mb-1">
+    <Card className="shadow-md border-slate-100 rounded-[2rem] overflow-hidden mb-4">
+      <CardContent className="p-4">
+        {/* Title Section with Badge at far right */}
+        <div className="flex justify-between items-center mb-2">
+          <div className="flex items-center space-x-3">
             <h3 className="text-lg font-bold text-slate-900">{courseTitle}</h3>
             <span className="text-xs text-slate-500">
                 {courseCode} | {teacher}
             </span>
           </div>
-          <p className="text-md font-medium text-slate-800 mb-4">{assignmentName}</p>
+          <StatusBadge status={status} grade={grade} />
+        </div>
 
+        <p className="text-md font-medium text-slate-800 mb-4">{assignmentName}</p>
+
+        {/* Bottom Section: Buttons and Right Info */}
+        <div className="flex justify-between items-start">
           {/* Action Buttons */}
           <div className="flex space-x-3">
             <Button variant="outline" className="text-slate-600 hover:bg-slate-100">
               <Eye className="w-4 h-4 mr-2" />
               View Details
             </Button>
-            
+
             <SubmitButton />
 
-            <Button variant="outline" className="text-slate-600 hover:bg-slate-100">
+            <Button variant="outline" className="text-slate-600 hover:bg-slate-100" onClick={onDownloadWork}>
               <Download className="w-4 h-4 mr-2" />
               Download Work
             </Button>
-            
           </div>
-        </div>
 
-        {/* Right Section: Score, Deadline, Status Badge */}
-        <div className="flex flex-col items-end pl-6 min-w-[150px]">
+          {/* Right Section: Score */}
+          <div className="flex flex-col items-end min-w-[150px]">
             {/* Score */}
             <div className="text-2xl font-bold text-slate-900 mb-2 h-8">
                 {status === 'Graded' && score !== null ? score : ''}
             </div>
 
-            {/* Deadline Text */}
-            <div className="text-sm font-medium text-slate-600 flex items-center mb-1">
+            {/* Deadline and Submitted Status on same line with separator */}
+            <div className="flex items-center">
+              <div className="text-sm font-medium text-slate-600 flex items-center">
                 <Clock className={`w-4 h-4 mr-1 ${timeOver ? 'text-red-500' : 'text-slate-500'}`} />
                 {deadlineText}
-            </div>
-            
-            {/* Submitted/Pending Text (Right Side) */}
-            <p className={`text-xs font-semibold ${submittedText === 'Submitted' ? 'text-green-600' : 'text-amber-600'} mb-2`}>
+              </div>
+              <span className={`mx-2 text-xl font-bold ${submittedText === 'Submitted' ? 'text-green-600' : 'text-amber-600'}`}>•</span>
+              <p className={`text-xs font-semibold ${submittedText === 'Submitted' ? 'text-green-600' : 'text-amber-600'}`}>
                 {submittedText}
-            </p>
-
-            {/* Status Badge */}
-            <StatusBadge status={status} grade={grade} />
+              </p>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -146,7 +153,27 @@ const AssignmentCard = ({ assignment }) => {
 
 // --- Main Component: Assignments ---
 const Assignments = () => {
+  const navigate = useNavigate();
   const [activeFilter, setActiveFilter] = useState('All');
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  const handleSubmitWork = () => {
+    setModalMessage('Please ensure your work meets all submission requirements. Contact help center for any assistance with submission guidelines.');
+    setShowDownloadModal(true);
+  };
+
+  const handleDownloadWork = () => {
+    setModalMessage('Kindly read and take note. Contact help center for any help or assistance.');
+    setShowDownloadModal(true);
+  };
+
+  const handleDownload = () => {
+    // Handle the actual download logic here
+    console.log('Processing assignment action...');
+    // You can add actual download/submit functionality here
+    setShowDownloadModal(false);
+  };
   
   const filteredAssignments = studentAssignments.filter(assignment => {
     if (activeFilter === 'All') return true;
@@ -184,7 +211,22 @@ const Assignments = () => {
       {/* Header and Filters */}
       <div className="flex justify-between items-start">
         <div>
-            <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Student Dashboard / Assignments</h1>
+            <Breadcrumb>
+              <BreadcrumbList className="text-2xl font-extrabold text-slate-900 tracking-tight">
+                <BreadcrumbItem>
+                  <BreadcrumbLink
+                    className="text-slate-500 cursor-pointer hover:text-blue-600 transition-colors"
+                    onClick={() => navigate('/')}
+                  >
+                    Student Dashboard
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="text-base text-slate-500">/</BreadcrumbSeparator>
+                <BreadcrumbItem>
+                  <BreadcrumbPage className="font-bold text-base">Assignments</BreadcrumbPage>
+                </BreadcrumbItem>
+              </BreadcrumbList>
+            </Breadcrumb>
             <p className="text-md text-slate-600 mt-1">
                 Submit work and track grading status.
             </p>
@@ -203,7 +245,12 @@ const Assignments = () => {
       {/* Assignment List */}
       <div className="space-y-4">
         {filteredAssignments.map(assignment => (
-          <AssignmentCard key={assignment.id} assignment={assignment} />
+          <AssignmentCard
+            key={assignment.id}
+            assignment={assignment}
+            onSubmitWork={handleSubmitWork}
+            onDownloadWork={handleDownloadWork}
+          />
         ))}
         
         {/* Pagination (Matching the visual) */}
@@ -217,6 +264,14 @@ const Assignments = () => {
             </Button>
         </div>
       </div>
+
+      {/* Download Notice Modal */}
+      <DownloadNoticeModal
+        isOpen={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+        onDownload={handleDownload}
+        message={modalMessage}
+      />
     </div>
   );
 };
